@@ -6,11 +6,11 @@ import json
 from pathlib import Path
 
 
-def make_submission(json_path: Path = Path("test_labels_SVM_baseline.json")):
+def make_submission(json_path: Path = Path("../submissions/test_labels_xgboost.json")):
     with open(json_path, "r") as file:
         test_labels = json.load(file)
 
-    file = open("submission.csv", "w")
+    file = open("../submissions/submission.csv", "w")
     file.write("id,target_feature\n")
     for key, value in test_labels.items():
         u_id = [key + "_" + str(i) for i in range(len(value))]

@@ -1,5 +1,7 @@
 import json
 from pathlib import Path
+import numpy as np
+import matplotlib.pyplot as plt
 
 def flatten(list_of_list):
     return [item for sublist in list_of_list for item in sublist]
@@ -20,7 +22,7 @@ def make_predictions(clf):
         y_test = clf.predict(X_test)
         test_labels[transcription_id] = y_test.tolist()
 
-    with open("../submissions/test_labels_SVM_baseline.json", "w") as file:
+    with open("test_labels_xgboost.json", "w") as file:
         json.dump(test_labels, file, indent=4)
 
 path_to_training = Path("../data/training")
@@ -38,6 +40,9 @@ test_set = flatten([[m_id+s_id for s_id in 'abcd'] for m_id in test_set])
 #####
 from sentence_transformers import SentenceTransformer
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 import pickle
@@ -49,7 +54,8 @@ bert = SentenceTransformer('all-MiniLM-L6-v2')
 X_training = pickle.load(open("../data/X_training.pkl", "rb"))
 y_training = pickle.load(open("../data/y_training.pkl", "rb"))
 
-print(X_training.shape)
+print('input loaded')
+print('shape of the input : ', X_training.shape)
 
 # split the data into training and testing sets
 
@@ -57,9 +63,11 @@ print(X_training.shape)
 
 #print("split done")
 
-# create a svm classifier
+# create a svm classifier   
+# use the XGBoost classifier from the xgboost package with 1000 trees and a maximum depth of 1 and learning rate of 0.15
 
-clf = SVC(kernel='rbf', verbose=True, C=1, class_weight='balanced')
+B = 1000
+clf = XGBClassifier(n_estimators=B, max_depth=2, learning_rate=0.15)
 
 # Train the model using the training sets
 
@@ -69,13 +77,16 @@ print("fit done")
 
 # Predict the response for test dataset
 
+#acc_train = np.sum(clf.predict(X_train)==y_train)/len(y_train)
+#acc_test = np.sum(clf.predict(X_test)==y_test)/len(y_test)
+
 #y_pred = clf.predict(X_test)
 
 #print("predict done")
 
 # compute F1 score
 
-#print(f1_score(y_test, y_pred, average='macro'))
+#print(f1_score(y_test, y_pred))
 
 make_predictions(clf)
 

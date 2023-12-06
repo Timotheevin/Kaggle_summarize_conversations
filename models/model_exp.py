@@ -23,8 +23,8 @@ def make_predictions(X_test, clf):
     with open("test_labels_text_baseline.json", "w") as file:
         json.dump(test_labels, file, indent=4)
 
-path_to_training = Path("training")
-path_to_test = Path("test")
+path_to_training = Path("../data/training")
+path_to_test = Path("../data/test")
 
 #####
 # training and test sets of transcription ids
@@ -37,7 +37,7 @@ test_set = flatten([[m_id+s_id for s_id in 'abcd'] for m_id in test_set])
 # SVM
 #####
 from sentence_transformers import SentenceTransformer
-from sklearn.svm import SVC, SVR
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 import pickle
@@ -49,7 +49,8 @@ bert = SentenceTransformer('all-MiniLM-L6-v2')
 X_training = pickle.load(open("../data/X_training.pkl", "rb"))
 y_training = pickle.load(open("../data/y_training.pkl", "rb"))
 
-print(X_training.shape)
+print('data loaded')
+print('shape of the data : ', X_training.shape)
 
 # split the data into training and testing sets
 
