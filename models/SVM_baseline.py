@@ -23,8 +23,8 @@ def make_predictions(clf):
     with open("../submissions/test_labels_SVM_baseline.json", "w") as file:
         json.dump(test_labels, file, indent=4)
 
-path_to_training = Path("training")
-path_to_test = Path("test")
+path_to_training = Path("../data/training")
+path_to_test = Path("../data/test")
 
 #####
 # training and test sets of transcription ids
@@ -59,7 +59,7 @@ print(X_training.shape)
 
 # create a svm classifier
 
-clf = SVC(kernel='rbf', verbose=True)
+clf = SVC(kernel='rbf', verbose=True, C=100, class_weight='balanced')
 
 # Train the model using the training sets
 

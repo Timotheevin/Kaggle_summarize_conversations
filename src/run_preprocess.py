@@ -5,8 +5,8 @@ def flatten(list_of_list):
     return [item for sublist in list_of_list for item in sublist]
 
 
-path_to_training = Path("training")
-path_to_test = Path("test")
+path_to_training = Path("../data/training")
+path_to_test = Path("../data/test")
 
 #####
 # training and test sets of transcription ids
@@ -28,7 +28,7 @@ from sentence_transformers import SentenceTransformer
 bert = SentenceTransformer('all-MiniLM-L6-v2')
 
 y_training = []
-with open("training_labels.json", "r") as file:
+with open("../data/training_labels.json", "r") as file:
     training_labels = json.load(file)
 X_training = []
 for transcription_id in training_set:
@@ -46,5 +46,5 @@ X_training = bert.encode(X_training, show_progress_bar=True)
 
 import pickle
 
-pickle.dump(X_training, open("X_training.pkl", "wb"))
-pickle.dump(y_training, open("y_training.pkl", "wb"))
+pickle.dump(X_training, open("../data/X_training.pkl", "wb"))
+pickle.dump(y_training, open("../data/y_training.pkl", "wb"))

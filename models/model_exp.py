@@ -37,7 +37,7 @@ test_set = flatten([[m_id+s_id for s_id in 'abcd'] for m_id in test_set])
 # SVM
 #####
 from sentence_transformers import SentenceTransformer
-from sklearn.svm import SVC
+from sklearn.svm import SVC, SVR
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 import pickle
@@ -46,8 +46,8 @@ bert = SentenceTransformer('all-MiniLM-L6-v2')
 
 # load variables from pickle file
 
-X_training = pickle.load(open("X_training.pkl", "rb"))
-y_training = pickle.load(open("y_training.pkl", "rb"))
+X_training = pickle.load(open("../data/X_training.pkl", "rb"))
+y_training = pickle.load(open("../data/y_training.pkl", "rb"))
 
 print(X_training.shape)
 
@@ -59,7 +59,7 @@ print("split done")
 
 # create a svm classifier
 
-clf = SVC(kernel='rbf', verbose=True)
+clf = SVC(kernel='rbf', verbose=True, class_weight='balanced')
 
 # Train the model using the training sets
 
@@ -75,6 +75,6 @@ print("predict done")
 
 # compute F1 score
 
-print(f1_score(y_test, y_pred, average='macro'))
+print(f1_score(y_test, y_pred))
 
 
