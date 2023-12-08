@@ -1,1 +1,4 @@
 *.pkl
+*.pth
+*.joblib
+*.h5
